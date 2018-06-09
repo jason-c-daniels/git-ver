@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+ver=$(echo "$(git rev-parse --symbolic --tags | sed -e 's/\(.*\)\([-].*\)/\1/')" | sed 's/[^0-9.]//g' | sort -i | tail -1 )
+
+if [[ "$APPVEYOR" == true ]]; then
+    ver=$APPVEYOR_BUILD_VERSION
+elif [[ "$VersionPrefix" != "" ]]; then
+    ver=$VersionPrefix
+elif [[ "$Version" != "" ]]; then
+    ver=$Version
+fi
+if [[ "$ver" == "" ]]; then ver="0.0.1"; fi
+echo $ver
