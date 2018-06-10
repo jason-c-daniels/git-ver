@@ -15,7 +15,7 @@ get_script_dir () {
 get_suffix() {
     GIT_VER_DIR=$(get_script_dir)
     # local system defaults. These are overridden by appveyor
-    local rev="$($GIT_VER_DIR/git-ver get-rev -a)"
+    local rev="$($GIT_VER_DIR/git-ver get-rev)"
     local suffix="$(git rev-parse --symbolic --tags | sort -i | tail -1 | sed -e 's/\(.*\)\([-]\)\(.*\)/\3/').$rev"
     local branch_name=$(git rev-parse --abbrev-ref HEAD)
     if [[ "$APPVEYOR" == true ]]; then
