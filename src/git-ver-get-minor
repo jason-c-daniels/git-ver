@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-set -e
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
      # While $SOURCE is a symlink, resolve it
