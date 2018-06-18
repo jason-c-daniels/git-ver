@@ -27,6 +27,7 @@ If a suitable version is extracted from a tag it becomes the candidate version n
     1. An APP_VEYOR_VERSION environment variable is set. 
     2. OR A VersionPrefix environment variable is set. 
     3. OR A Version environment variable is set.
+    4. OR The current branch name starts with release
 
 The contents of the environment variable are assumed to match the MAJOR.MINOR.PATCH format. Ensure that they do.
 

@@ -24,14 +24,14 @@ get_suffix() {
 
     if [[ "$branch_name" == master ]]; then 
         suffix=""
-    elif [[ "$branch_name" == "release/"* ]]; then 
+    elif [[ "$branch_name" == "release"* ]]; then 
         suffix="rc"
-    elif [[ "$branch_name" == develop ]]; then 
-        suffix="pre"
-    elif [[ "$branch_name" == "feature/"* ]]; then 
-        suffix="beta"; 
-    else
+    elif [[ "$branch_name" == "develop"* ]]; then 
+        suffix="beta"
+    elif [[ "$branch_name" == "feature"* ]]; then 
         suffix="alpha"; 
+    else
+        suffix="pre"; 
     fi
 
     if [[ ( "$1" == "--rev" || "$1" == "-r" ) && "$rev" -gt 0 && "$suffix" != "" ]]; then suffix="$suffix+r$rev"; fi
