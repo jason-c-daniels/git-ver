@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
      # While $SOURCE is a symlink, resolve it
@@ -20,6 +20,7 @@ get_suffix() {
     local branch_name=$(git rev-parse --abbrev-ref HEAD)
     if [[ "$APPVEYOR" == true ]]; then
         rev=$APPVEYOR_PULL_REQUEST_NUMBER
+        branch_name=$APPVEYOR_REPO_BRANCH #APPVEYOR grabs HEAD, instead of branch_name, for many types of commits. This confuses git-ver. So override it.
     fi
 
     if [[ "$branch_name" == master ]]; then 
