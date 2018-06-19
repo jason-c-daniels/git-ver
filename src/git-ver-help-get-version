@@ -24,10 +24,10 @@ To establish a version number the following steps take place:
     3. The list is sorted highest to lowest and the highest value is chosen. Tag wisely so as not to break this feature.
 
 If a suitable version is extracted from a tag it becomes the candidate version number. A candidate can be overridden when any of the following occur:
-    1. An APP_VEYOR_VERSION environment variable is set. 
-    2. OR A VersionPrefix environment variable is set. 
-    3. OR A Version environment variable is set.
-    4. OR The current branch name starts with release
+    1. The current branch name starts with release (this overrides all other checks)
+    2. OR An APP_VEYOR_VERSION environment variable is set. 
+    3. OR A VersionPrefix environment variable is set. 
+    4. OR A Version environment variable is set.
 
 The contents of the environment variable are assumed to match the MAJOR.MINOR.PATCH format. Ensure that they do.
 

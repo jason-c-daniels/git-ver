@@ -1,5 +1,5 @@
 #!/bin/bash
-GIT_VER_VERSION="0.0.1-alpha"
+GIT_VER_VERSION="0.0.2-alpha+r2"
 set +ex
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
