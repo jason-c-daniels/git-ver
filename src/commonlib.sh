@@ -88,7 +88,7 @@ get_rev() {
     local last_tag_ref=$(git rev-list --no-walk --max-count=1 --tags=v*$suffix*)
 
     if [[ "$last_tag_ref" == "" ]]; then
-        rev=1
+        rev=0
     else
         # count commits since last tag.
         local rsl=$(git rev-list $last_tag_ref..HEAD --count)
