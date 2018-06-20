@@ -1,21 +1,5 @@
 #!/bin/bash
 set -e
-get_script_dir () {
-     SOURCE="${BASH_SOURCE[0]}"
-     # While $SOURCE is a symlink, resolve it
-     while [ -h "$SOURCE" ]; do
-          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-          SOURCE="$( readlink "$SOURCE" )"
-          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
-          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-     done
-     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-     echo "$DIR"
-}
-
-
-GIT_VER_DIR=$(get_script_dir)
-
 if [[ "$1" == "" ]]; then
 echo "
 usage: git-ver [command] [command arguments]
@@ -42,13 +26,10 @@ help        : Displays this help information.
 
 "
 else
-
-    #( export GIT_VER_VERSION; "GIT_VER_DIR/git-ver-help-$1" 2>&1 /dev/null || { echo >&2 "Cannot find help for command: $1."; exit 1; } )
     if [[ -f "$GIT_VER_DIR/git-ver-help-$1" ]]; then
         ( export GIT_VER_VERSION; "$GIT_VER_DIR/git-ver-help-$1" )
     else 
         echo >&2 "Couldn't find help for: $1."; 
         exit 1; 
     fi;
-
 fi;
