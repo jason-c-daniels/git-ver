@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 echo "
-usage: git-ver get-suffix [-r] [-d]
-get-suffix : Gets the semantic version suffix. 
+usage: git-ver get-semver [-r] [-d]
+get-semver : Retrieves a full semantic version, optionally with metadata (+r1; +dYYYYMMDD-hhmmss)
 
 To establish a suffix, the following steps are taken.
     1. The candidate revision number is retrieved.
@@ -19,6 +19,4 @@ There are two additional optional metadata parameters.
     -d | --date : This includes the build date and time in the following format: YYMMDD-HHmmss. For example: -alpha+20180606.211206
 
     COMING SOON: -r and -d can be used with each other. When this is done -r is appended first, then -d. For example: -rc+5+20180806.011033
-
-    NOTE: -r and -d are passed on to this command when calling git-ver get-semver
 "

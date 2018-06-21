@@ -16,7 +16,7 @@ get-prefix  : Returns the version with a prefix, prefix defaults to 'v'
 
 get-rev     : Counts the number of commits from the last tag and returns that as a revision number. (placed in info as .rev#)
 
-get-semver  : Retrieves a full semantic version, optionally with 
+get-semver  : Retrieves a full semantic version, optionally with metadata (+r1; +dYYYYMMDD-hhmmss)
 
 get-suffix  : gets the suffix for a pre-release semantic version. (e.g. -alpha.1)
 

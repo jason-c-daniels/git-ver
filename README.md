@@ -8,7 +8,7 @@ I wanted a highly portable tool with no dependency on tools outside of git. In s
 
 ### Why bash?
 
-It's a shell that I use on Windows and of course linux. It's also supported on Mac OS. Many CI/CD tools are built on `docker`, and therefore, by default, Linux.
+It's a shell that I use on Windows and of course Linux. It's also supported on Mac OS. Many CI/CD tools are built on `docker`, and therefore, by default, Linux.
 
 ### Why not just use GitVersion?
 
@@ -32,7 +32,7 @@ For more details on the individual commands type `git-ver help [command]`
 
 `get-rev` : Counts the number of commits from the last tag and returns that as a revision number. (placed in info as _info_**#**)
 
-`get-semver` : Retrieves a full semantic version, optionally with
+`get-semver` : Retrieves a full semantic version, optionally with metadata (+r1; +dYYYYMMDD-hhmmss)
 
 `get-suffix` : gets the suffix for a pre-release semantic version. (e.g. -alpha1)
 
