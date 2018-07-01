@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -ex
+#set -e
 get_suffix_from_branch_name() {
     local branch_name=$1
     local branch_suffix=""
@@ -103,6 +103,60 @@ get_rev() {
     echo "$rev"
 }
 
+get_major() {
+    local ver="$(get_version)"
+    local major=$( echo $ver | sed 's/\./ /g' | awk '{print $1}' )
+    if [[ "$major" == "" ]]; then major=0; fi
+    if [[ "$1" == bump ]]; then major=$(expr $major + 1); fi
+    echo $major
+}
+
+get_minor() {
+    local ver="$(get_version)"
+    local minor=$( echo $ver | sed 's/\./ /g' | awk '{print $2}' )
+    if [[ "$minor" == "" ]]; then minor=0; fi
+    if [[ "$1" == bump ]]; then minor=$(expr $minor + 1); fi
+    echo $minor
+}
+
+get_patch() {
+    local ver="$(get_version)"
+    local patch=$( echo $ver | sed 's/\./ /g' | awk '{print $3}' )
+    if [[ "$patch" == "" ]]; then patch=0; fi
+    if [[ "$1" == bump ]]; then patch=$(expr $patch + 1); fi
+    echo $patch
+}
+
 get_prefix() {
     echo "v$(get_version)"
 }
+
+get_semver() {
+    local prefix="$(get_prefix)"
+    local suffix="$(get_suffix $1)"
+    local semver=""
+    if [[ "$suffix" != "" ]]; then 
+        semver="$prefix-$suffix"
+    fi; 
+
+    echo "$semver"
+}
+
+is_in_git_repo() {
+    echo $(git rev-parse --is-inside-work-tree)
+}
+
+export -f get_branch_suffix
+export -f get_branch_name
+export -f get_tag_suffix
+export -f get_tag
+export -f get_suffix_from_branch_name            
+export -f get_version
+export -f get_suffix
+export -f get_prefix
+export -f get_patch
+export -f get_minor
+export -f get_major
+export -f get_rev
+export -f get_semver
+export -f is_in_git_repo

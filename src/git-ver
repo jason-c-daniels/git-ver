@@ -2,30 +2,24 @@
 set -e
 export GIT_VER_VERSION="0.0.3-beta"
 export GIT_VER_DIR=$(dirname $(readlink -f $0))
-if [ $1 == version ]; then
-    bash "$GIT_VER_DIR/git-ver-$1" ${*:2} 
-elif [ $(git rev-parse --is-inside-work-tree) == true ]; then
+main () {
+    source "$GIT_VER_DIR/git-ver.bashlib" #include the common library so everything in here can execute.
+    if [[ $1 == version || $1 == help ]]; then
+        bash "$GIT_VER_DIR/git-ver-$1" ${*:2} 
+    elif [ "$(is_in_git_repo)" == true ]; then
 
-    command="$GIT_VER_DIR/git-ver-$1"
+        command="$GIT_VER_DIR/git-ver-$1"
 
-    if [[ -f $command ]]; then
-        source "$GIT_VER_DIR/commonlib.sh" #include the common library so everything in here can execute.
-        export -f get_branch_suffix
-        export -f get_branch_name
-        export -f get_tag_suffix
-        export -f get_tag
-        export -f get_suffix_from_branch_name
-        export -f get_version
-        export -f get_suffix
-        export -f get_prefix
-        export -f get_rev
-        bash $command ${*:2} 
-    else 
-        echo >&2 "Unknown command: $1."
-        bash "$GIT_VER_DIR/git-ver-help"
-        exit 1
+        if [[ -f $command ]]; then
+            bash $command ${*:2} 
+        else 
+            echo >&2 "Unknown command: $1."
+            bash "$GIT_VER_DIR/git-ver-help"
+            exit 1
+        fi;
+    else
+        echo "The current directory isn't a git working tree. You must be in a git working tree to run this command"
+        exit 2
     fi;
-else
-    echo "The current directory isn't a git working tree. You must be in a git working tree to run this!"
-    exit 2
-fi;
+}
+main $*
