@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+echo "
+usage: git-ver get-repo-root
+       git ver get-repo-root
+
+get-repo-root : Gets the full path to the root of the current repository
+
+"

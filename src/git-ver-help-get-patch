@@ -2,6 +2,9 @@
 set -e
 echo "
 usage: git-ver get-patch
+       git ver get-patch
+
+
 get-patch   : Returns the patch number from the current semantic version number. (Maj.Min.Patch[-info+metadata])
 
 This number is extracted from an internal call to git-ver get-version.

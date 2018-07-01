@@ -2,6 +2,8 @@
 set -e
 echo "
 usage: git-ver get-major
+       git ver get-major
+
 get-major   : Returns the major number from the current semantic version number. (Maj.Min.Patch[-info+metadata])
 
 This number is extracted from an internal call to git-ver get-version.

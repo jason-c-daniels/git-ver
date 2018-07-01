@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 echo "
-usage: git-ver version 
-This displays the current version ($GIT_VER_VERSION) of the git-ver tools.
+usage: git-ver version
+
+This displays the current version ($GIT_VER_APP_VERSION) of the git-ver tools.
 "

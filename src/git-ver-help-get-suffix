@@ -2,6 +2,8 @@
 set -e
 echo "
 usage: git-ver get-suffix [-r] [-d]
+       git ver get-suffix [-r] [-d]
+
 get-suffix : Gets the semantic version suffix. 
 
 To establish a suffix, the following steps are taken.

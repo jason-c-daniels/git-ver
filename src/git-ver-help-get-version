@@ -1,20 +1,38 @@
 #!/bin/bash
 set -e
 echo "
-usage: git-ver get-version
-get-version : Gets the version number in Major.Minor.Patch format. If none can be established, it uses 0.0.1.
+usage: git-ver get-version [bump <major|minor|patch>]
+       git ver get-version [bump <major|minor|patch>]
+
+get-version : Gets the version number in Major.Minor.Patch format, optionally incrementing the version.
+
+    bump - increments the indicated part of the version number.
+
+DETAILS:
 
 To establish a version number the following steps take place:
+    1. If available, extract the version from the latest tag on the current branch.
+    2. Otherwise, extract the version from an environment variable
+    3. Otherwise, use the content of \$GIT_VER_REPO_ROOT/repo.version
+    4. If all of the above fails, version is set to 0.0.1
+
+Retrieving from a tag:
     1. First git is interrogated for tags. 
     2. The tags are stripped of any non [0-9.] characters.
     3. The list is sorted highest to lowest and the highest value is chosen. Tag wisely so as not to break this feature.
 
-If a suitable version is extracted from a tag it becomes the candidate version number. A candidate can be overridden when any of the following occur:
+Retrieving from an environment variable:
     1. The current branch name starts with release (this overrides all other checks)
     2. OR An APP_VEYOR_VERSION environment variable is set. 
     3. OR A VersionPrefix environment variable is set. 
     4. OR A Version environment variable is set.
 
-The contents of the environment variable are assumed to match the MAJOR.MINOR.PATCH format. Ensure that they do.
+    NOTE: The contents of the environment variable are assumed to match the MAJOR.MINOR.PATCH format. Ensure that they do.
+
+File format for repo.version:
+    <MAJOR>.<MINOR>.<PATCH>[-suffix+metadata]
+    <MAJOR>, <MINOR>, <PATCH> must match the regular expression [0-9]+
+
+    NOTE: if present [-suffix+metadata], is truncated
 
 "

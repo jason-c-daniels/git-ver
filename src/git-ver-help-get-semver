@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 echo "
-usage: git-ver get-semver [-r] [-d]
+usage: git-ver get-semver [-r] [-d] [bump <major|minor|patch>]
+       git ver get-semver [-r] [-d] [bump <major|minor|patch>]
+
 get-semver : Retrieves a full semantic version, optionally with metadata (+r1; +dYYYYMMDD-hhmmss)
 
 To establish a suffix, the following steps are taken.
