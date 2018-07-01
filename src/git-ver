@@ -10,10 +10,10 @@ main () {
         command="$GIT_VER_APP_DIR/git-ver-$1"
 
         if [[ -f $command ]]; then
-            export GIT_VER_REPO_ROOT="$(get_repo_root)"
-            export GIT_VER_REPO_VERSION="$(get_version)"
-            export GIT_VER_REPO_LATEST_TAG="$(get_tag)"
-            export GIT_VER_REPO_BRANCH_NAME="$(get_branch_name)"
+        export GIT_VER_REPO_ROOT="$(get_repo_root)"
+        export GIT_VER_REPO_BRANCH_NAME="$(get_branch_name)"
+        export GIT_VER_REPO_VERSION="$(get_version)"
+        export GIT_VER_REPO_LATEST_TAG="$(get_tag)"
             bash $command ${*:2}
         else 
             echo >&2 "Unknown command: $1."

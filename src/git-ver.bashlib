@@ -53,13 +53,15 @@ get_tag_suffix() {
 }
 
 get_tag() {
+    local tag=""
     if [[ "$GIT_VER_REPO_LATEST_TAG" == "" ]]; then
         local my_branch="$(get_branch_name)"
-        local my_suffix="$(get_suffix_from_branch_name $branch)"
-        echo $(git name-rev $my_branch --name-only --refs=v*$my_suffix*)
+        local my_suffix="$(get_suffix_from_branch_name $my_branch)"
+        tag="$(git name-rev $my_branch --name-only --refs=v*$my_suffix* | sed -s 's/undefined//g')"
     else
-        echo "$GIT_VER_REPO_LATEST_TAG"
+        tag=$GIT_VER_REPO_LATEST_TAG
     fi
+    echo $tag
 }
 
 get_version() {
@@ -124,7 +126,7 @@ get_rev() {
     local suffix=$(get_branch_suffix)
     local last_tag="$(get_tag)"
     local last_tag_ref=$(git rev-list --no-walk --max-count=1 --tags=v*$suffix*)
-    
+
     if [[ "$last_tag_ref" == "" ]]; then
         rev=0
     else
@@ -133,7 +135,7 @@ get_rev() {
         
         #extract the rev (if any) from the current tag.
         local rft=$(echo $last_tag | sed -e 's/\(.*[-].*\)\([r][0-9]\)/\2/' | sed -e 's/[^0-9]//g')
-        if [[ "$rtf" == "" ]]; then rft=0; fi
+        if [[ "$rft" == "" ]]; then rft=0; fi
         rev=$(expr $rsl + $rft)
     fi
     
@@ -213,6 +215,7 @@ export -f get_patch
 export -f get_minor
 export -f get_major
 export -f get_rev
+export -f get_tag
 export -f get_semver
 export -f is_in_git_repo
 export -f get_repo_root
