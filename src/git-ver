@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
-export GIT_VER_APP_VERSION="0.1.0-alpha"
 export GIT_VER_APP_DIR=$(dirname $(readlink -f $0))
+export GIT_VER_APP_VERSION="$(cat $GIT_VER_APP_DIR/git-ver.version)"
+
 main () {
     source "$GIT_VER_APP_DIR/git-ver.bashlib" #include the common library so everything in here can execute.
     if [[ $1 == version || $1 == help ]]; then
