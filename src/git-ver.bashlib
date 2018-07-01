@@ -57,7 +57,7 @@ get_tag() {
     if [[ "$GIT_VER_REPO_LATEST_TAG" == "" ]]; then
         local my_branch="$(get_branch_name)"
         local my_suffix="$(get_suffix_from_branch_name $my_branch)"
-        tag="$(git name-rev $my_branch --name-only --refs=v*$my_suffix* | sed -s 's/undefined//g')"
+        tag="$(git describe --abbrev=0 --tags --match v*alpha* | sed -s 's/fatal\: No names found, cannot describe anything\.//g')"
     else
         tag=$GIT_VER_REPO_LATEST_TAG
     fi
