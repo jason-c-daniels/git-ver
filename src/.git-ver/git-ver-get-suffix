@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-get_prefix $*
+get_suffix "$@"

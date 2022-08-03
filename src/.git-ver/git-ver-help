@@ -30,8 +30,8 @@ help        : Displays this help information.
 
 "
 else
-    if [[ -f "$GIT_VER_APP_DIR/git-ver-help-$1" ]]; then
-        ( export GIT_VER_APP_VERSION; "$GIT_VER_APP_DIR/git-ver-help-$1" )
+    if [[ -f "$GIT_VER_LIBS_DIR/git-ver-help-$1" ]]; then
+        ( export GIT_VER_APP_VERSION; "$GIT_VER_LIBS_DIR/git-ver-help-$1" )
     else 
         echo >&2 "Couldn't find help for: $1."; 
         exit 1; 

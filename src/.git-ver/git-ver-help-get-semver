@@ -10,15 +10,15 @@ To establish a suffix, the following steps are taken.
     1. The candidate revision number is retrieved.
     2. If present, the suffix from the latest tag is used.
     3. If no tag suffix is extract, the branch name is used instead.
-    4. The master branch gets no suffix. Only actual releases happen from it.
+    4. The master or main branch gets no suffix. Only actual releases happen from it.
     5. A branch with a name starting with release gets the suffix of -rc
     6. A branch with a name starting with develop gets the suffix of -beta
     7. A branch with a name starting with feature gets the suffix of -alpha
     8. All other branches get a suffix of -pre
 
 There are two additional optional metadata parameters.
-    -r | --rev  : This includes the results of git-ver get-rev as metadata after the main part of the suffix. For example: -rc+5
-    -d | --date : This includes the build date and time in the following format: YYMMDD-HHmmss. For example: -alpha+20180606.211206
+    -r | --rev  : This includes the results of git-ver get-rev as metadata after the main part of the suffix. For example: -rc+r5
+    -d | --date : This includes the build date and time in the following format: YYMMDD-HHmmss. For example: -alpha+d20180606.211206
 
-    COMING SOON: -r and -d can be used with each other. When this is done -r is appended first, then -d. For example: -rc+5+20180806.011033
+    NOTE: -r and -d can be used with each other. When this is done -r is appended first, then -d. For example: -rc+r5+d20180806-011033
 "

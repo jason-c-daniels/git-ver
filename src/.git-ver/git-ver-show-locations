@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+echo "install dir: $GIT_VER_APP_DIR"
+echo "library dir: $GIT_VER_LIBS_DIR"
