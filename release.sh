@@ -16,7 +16,7 @@ DEST_DIR=$(realpath "$DEST_DIR")
 VERSION=$(<"$THIS_DIR/src/.git-ver/VERSION")
 
 # compose the target zip file name
-ZIP_FILE_NAME="$DEST_DIR/git-ver_v$VERSION.zip"
+ZIP_FILE_NAME="$DEST_DIR/git-ver_$VERSION.zip"
 
 # check that zip is actually installed. (intentionally unused results)
 # shellcheck disable=SC2034
@@ -36,10 +36,10 @@ zip -r "$ZIP_FILE_NAME" .
 
 # apply the tag locally to git.
 # this script doesn't push the tag as a safety mechanism.
-echo "Adding/resetting version tag v$VERSION"
-git tag -f "v$VERSION"
+echo "Adding/resetting version tag $VERSION"
+git tag -f "$VERSION"
 
 # warn the user that they'll need to manually push the tag
 echo "You will need to manually upload the release and push the version tag to GitHub."
-echo "       git push origin v$VERSION"
+echo "       git push origin $VERSION"
 popd
