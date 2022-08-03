@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+echo "$GIT_VER_APP_VERSION"

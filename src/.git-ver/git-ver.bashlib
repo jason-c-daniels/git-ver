@@ -1,0 +1,248 @@
+#!/bin/bash
+#set -e
+get_repo_root() {
+    # shellcheck disable=SC2005
+    echo "$(git rev-parse --show-toplevel)"
+}
+
+get_suffix_from_branch_name() {
+    local branch_name=$1
+    local branch_suffix=""
+    if [[ "$branch_name" == master || "$branch_name" == main ]]; then
+        branch_suffix=""
+        elif [[ "$branch_name" == "release"* ]]; then
+        branch_suffix="rc"
+        elif [[ "$branch_name" == "develop"* ]]; then
+        branch_suffix="beta"
+        elif [[ "$branch_name" == "feature"* ]]; then
+        branch_suffix="alpha";
+    else
+        branch_suffix="pre";
+    fi
+    echo "$branch_suffix"
+}
+
+get_branch_suffix() {
+    local branch_name
+    branch_name="$(get_branch_name)"
+    # shellcheck disable=SC2005
+    echo "$(get_suffix_from_branch_name "$branch_name")"
+}
+
+get_branch_name() {
+    local branch_name=""
+    
+    # shellcheck disable=SC2153
+    if [[ "$GIT_VER_REPO_BRANCH_NAME" != "" ]]; then
+        branch_name="$GIT_VER_REPO_BRANCH_NAME"
+    elif [[ "$APPVEYOR" == true ]]; then
+        branch_name=$APPVEYOR_REPO_BRANCH #APPVEYOR grabs HEAD, instead of branch_name, for many types of commits. This confuses git-ver. So override it.
+    elif [[ "$BRANCH" != "" ]]; then
+        branch_name="$BRANCH"
+    elif [[ "$BRANCH_NAME" != "" ]]; then
+        branch_name="$BRANCH_NAME"
+    elif [[ "$GIT_BRANCH" != "" ]]; then
+        branch_name="$GIT_BRANCH"
+    elif [[ "$CURRENT_BRANCH" != "" ]]; then
+        branch_name="$CURRENT_BRANCH"
+    else
+        branch_name=$(git rev-parse --abbrev-ref HEAD)
+    fi
+    
+    echo "$branch_name"
+}
+
+get_tag_suffix() {
+    # shellcheck disable=SC2005
+    echo "$( get_tag | sed -e 's/\(.*\)\([-]\)\(.*\)/\3/')"
+}
+
+get_tag() {
+    local tag=""
+    if [[ "$GIT_VER_REPO_LATEST_TAG" == "" ]]; then
+        local my_branch
+        my_branch="$(get_branch_name)"
+        local my_suffix
+        # TODO: figure out if this is needed.
+        my_suffix="$(get_suffix_from_branch_name "$my_branch")"
+        tag="$(git describe --abbrev=0 --tags --match v*alpha* | sed -s 's/fatal\: No names found, cannot describe anything\.//g')"
+    else
+        tag=$GIT_VER_REPO_LATEST_TAG
+    fi
+    echo "$tag"
+}
+
+get_version() {
+    local ver=""
+    
+    if [[ "$GIT_VER_REPO_VERSION" != "" ]]; then
+        ver=$GIT_VER_REPO_VERSION
+    else
+        local branch
+        branch=$(get_branch_name)
+        # shellcheck disable=SC2154
+        if [[ "$branch" == "release"* ]]; then
+            ver=$( $branch | sed -e 's/[^0-9.]//g')
+        elif [[ "$APPVEYOR" == true ]]; then
+            ver=$APPVEYOR_BUILD_VERSION
+        elif [[ "$VersionPrefix" != "" ]]; then
+            ver=$VersionPrefix
+        elif [[ "$Version" != "" ]]; then
+            ver=$Version
+        fi
+        if [[ "$ver" == "" ]]; then
+            ver="$( get_tag | sed -e 's/\(.*\)\([-].*\)/\1/' | sed 's/[^0-9.]//g')"
+        fi;
+    fi
+
+    if [[ "$ver" == "" && -f "$GIT_VER_REPO_ROOT/repo.version" ]]; then
+        ver=$(cat "$GIT_VER_REPO_ROOT/repo.version")
+    fi;
+
+    if [[ "$ver" == "" ]]; then ver="0.0.1"; fi;
+
+    if [[ "$1" == bump ]]; then
+        if [[ $2 == major ]]; then 
+            ver="$(get_major bump).0.0" 
+        elif [[ $2 == minor ]]; then 
+            ver="$(get_major).$(get_minor bump).0"
+        elif [[ $2 == patch ]]; then 
+            ver="$(get_major).$(get_minor).$(get_patch bump)";
+        fi
+    fi
+
+    echo "$ver"
+}
+
+get_suffix() {
+    # local system defaults. These are overridden by appveyor
+    local branch_suffix
+    branch_suffix="$(get_branch_suffix)"
+    local suffix=""
+    if [[ "$branch_suffix" != "" && ( "$1" == "--rev" || "$1" == "-r" || "$2" == "--rev" || "$2" == "-r")  ]]; then
+        local rev
+        rev="$(get_rev)"
+        if [[ "$rev" -gt 0 ]]; then suffix="$suffix+r$rev"; fi;
+    fi
+    
+    if [[ "$branch_suffix" != "" && ( "$1" == "--date" || "$1" == "-d" || "$2" == "--date" || "$2" == "-d" ) ]]; then
+        suffix="$suffix+d$(date -u '+%Y%m%d-%H%M%S')";
+    fi
+    
+    echo "$branch_suffix$suffix"
+}
+
+get_rev() {
+    local rev=0
+
+    if [[ "$APPVEYOR" == "true" ]]; then
+        rev=$APPVEYOR_PULL_REQUEST_NUMBER
+    fi
+
+    if [[ $rev -eq 0 ]]; then
+        # count commits since last tag in this branch
+        local suffix
+        suffix=$(get_branch_suffix)
+        local last_tag
+        last_tag="$(get_tag)"
+        local last_tag_ref
+        last_tag_ref=$(git rev-list --no-walk --max-count=1 --tags=v*"$suffix"*)
+
+        if [[ "$last_tag_ref" != "" ]]; then
+            # count commits since last tag.
+            local rev_count_since_last_tag
+            rev_count_since_last_tag=$(git rev-list "$last_tag_ref"..HEAD --count)
+            
+            #extract the rev (if any) from the current tag.
+            local rev_from_tag
+            rev_from_tag=$(echo "$last_tag" | sed -e 's/\(.*[-].*\)\([r][0-9]\)/\2/' | sed -e 's/[^0-9]//g')
+            if [[ "$rev_from_tag" == "" ]]; then rev_from_tag=0; fi
+            rev=$((10#"$rev_count_since_last_tag" + 10#"$rev_from_tag"))
+        fi
+    fi
+    echo "$rev"
+}
+
+get_major() {
+    local major
+    major=$( echo "$GIT_VER_REPO_VERSION" | sed 's/\./ /g' | awk '{print $1}' )
+    if [[ "$major" == "" ]]; then major=0; fi
+    if [[ "$1" == bump ]]; then major=$((10#"$major" + 1)); fi
+    echo "$major"
+}
+
+get_minor() {
+    local minor
+    minor=$( echo "$GIT_VER_REPO_VERSION" | sed 's/\./ /g' | awk '{print $2}' )
+    if [[ "$minor" == "" ]]; then minor=0; fi
+    if [[ "$1" == bump ]]; then minor=$((10#"$minor" + 1)); fi
+    echo "$minor"
+}
+
+get_patch() {
+    local patch
+    patch=$( echo "$GIT_VER_REPO_VERSION" | sed 's/\./ /g' | awk '{print $3}' )
+    if [[ "$patch" == "" ]]; then patch=0; fi
+    if [[ "$1" == bump ]]; then patch=$((10#"$patch" + 1)); fi
+    echo "$patch"
+}
+
+get_prefix() {
+    echo "v$(get_version "$@")"
+}
+
+get_semver() {
+
+    local prefix_params=""
+    local suffix_params=""
+    if [[ $1 == "-r" || $1 == "--rev" ]]; then 
+        suffix_params="-r"
+    elif [[ $1 == "-d" || $1 == "--date" ]]; then 
+        suffix_params="-d"
+    fi
+
+    if [[ $2 == "-r" || $2 == "--rev" ]]; then 
+        suffix_params="$suffix_params -r"
+        prefix_params="${*:3}"
+    elif [[ $2 == "-d" || $2 == "--date" ]]; then 
+        suffix_params="$suffix_params -d"
+        prefix_params="${*:3}"
+    elif [[ $suffix_params == "" ]]; then
+        prefix_params="$*"        
+    else
+        prefix_params="${*:2}"
+    fi
+
+    local suffix
+    suffix="$(get_suffix "$suffix_params")"
+    local semver
+    semver="$(get_prefix "$prefix_params")"
+    
+    if [[ "$suffix" != "" ]]; then
+        semver="$semver-$suffix"
+    fi;
+    
+    echo "$semver"
+}
+
+is_in_git_repo() {
+    # shellcheck disable=SC2005
+    echo "$(git rev-parse --is-inside-work-tree)"
+}
+
+export -f get_branch_suffix
+export -f get_branch_name
+export -f get_tag_suffix
+export -f get_tag
+export -f get_suffix_from_branch_name
+export -f get_version
+export -f get_suffix
+export -f get_prefix
+export -f get_patch
+export -f get_minor
+export -f get_major
+export -f get_rev
+export -f get_tag
+export -f get_semver
+export -f is_in_git_repo
+export -f get_repo_root

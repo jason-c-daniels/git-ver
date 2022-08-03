@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+echo "
+usage: git-ver show-locations
+       git ver show-locations
+
+This displays the directory git-ver is executing from and the location of its library files/commands.
+"
