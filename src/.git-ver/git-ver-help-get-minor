@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+echo "
+usage: git-ver get-minor
+       git ver get-minor
+       
+get-minor   : Returns the minor number from the current semantic version number.
+
+This number is extracted from an internal call to git-ver get-version.
+"

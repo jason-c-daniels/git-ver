@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+echo "
+usage: git-ver get-prefix
+       git ver get-prefix
+
+get-prefix  : Returns the version with a prefix, prefix defaults to 'v'
+
+This version number comes from an internal call to git-ver get-version.
+"
