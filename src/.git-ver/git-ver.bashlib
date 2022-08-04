@@ -64,7 +64,6 @@ count_tags() {
 get_tag() {
     local tag=""
     if [[ "$GIT_VER_REPO_LATEST_TAG" == "" ]]; then
-        local my_branch
         if [[ $(count_tags) -gt 0 ]]; then
           tag="$(git describe --tags --match v* $(git rev-list --tags --max-count=1) | sed -s 's/fatal\: No names found, cannot describe anything\.//g')"
         fi
