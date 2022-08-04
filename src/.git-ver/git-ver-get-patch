@@ -1,3 +1,6 @@
 #!/bin/bash
 set -e
-get_patch "$@"
+# Intentional shellcheck suppressions. I found that they goofed up the execution of the code
+# shellcheck disable=SC2086
+# shellcheck disable=SC2048
+get_patch $*
