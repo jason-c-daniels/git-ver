@@ -1,35 +1,45 @@
 ---
-name: Bug report
-about: Create a bug report to help drive improvements
+name: Bug Report
+about: Create a report to help drive improvements
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+### Bug Description (REQUIRED)
 
-**To Reproduce**
-Steps to reproduce the behavior:
+A clear and concise description of what the problematic behavior.
+
+### Data Setup/Scenario Description (OPTIONAL)
+
+A description of where/how to begin reproducing the bug. (i.e. In order to successfully reproduce the issue,
+what state does the shell need to be in? For example: Set GITHUB_TOKEN to a bad value...etc.) 
+
+### Steps To Reproduce (REQUIRED)
+
+*List the steps to Reproduce the behavior:*
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
-4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Observed Results (REQUIRED)
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+A clear and concise description of the results from executing the Steps to Reproduce. 
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### Expected Results (REQUIRED)
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+A clear and concise description of what you expected to happen instead.
 
-**Additional context**
+### Console Output/Log Files (OPTIONAL)
+
+If applicable, add console output/log files to help explain the problem.
+
+### Execution Environment (REQUIRED)
+
+- git-ver Version: [e.g. 0.0.3-alpha]
+- OS: [e.g. Debian 10, Windows 11]
+- Subsystem: [e.g. MSYS2, Git Bash, WSL2]
+- Shell: [e.g. bash, zsh ]
+- Git Version: [e.g. 2.33.1.windows.1]
+ 
+### Additional Context
+
 Add any other context about the problem here.
